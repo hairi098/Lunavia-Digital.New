@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="theme-color" content="#8b5cf6">
+    <meta name="description" content="Undangan Digital Pernikahan Premium - Desain Elegan, Harga Terjangkau">
+    <title>Lunavia Digital - Premium Wedding Invitations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="CSS/style.css">
+</head>
+<body>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Particles Background -->
+    <canvas id="particles"></canvas>
+
+    <!-- Floating WhatsApp Button -->
+    <div class="whatsapp-float" id="waButton">
+        <i class='bx bxl-whatsapp'></i>
+    </div>
+
+    <!-- WhatsApp Popup -->
+    <div class="whatsapp-popup" id="waPopup">
+        <div class="popup-header">
+            Tanya Admin Lunavia 💖<br>
+            <small>Online 09:00–22:00 WITA</small>
+        </div>
+        <div class="popup-body">
+            Silakan klik untuk mulai chat:
+            <div class="popup-support" onclick="openWhatsApp()">
+                <strong style="color: white;">Tim Support</strong><br>
+                <small style="color: white; margin-top: -17px;">Klik untuk buka WhatsApp</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Tracking Modal -->
+    <div class="order-tracking-modal" id="orderTrackingModal">
+        <div class="order-tracking-content">
+            <div class="order-tracking-header">
+                <h2>📦 Riwayat Pesanan</h2>
+                <button class="order-close-btn" onclick="closeOrderTracking()">✕</button>
+            </div>
+            
+           
+            
+            <div class="order-history-list" id="orderHistoryList">
+                <div class="empty-orders">
+                    <div class="empty-orders-icon">📦</div>
+                    <p>Belum ada riwayat pesanan</p>
+                    <button class="btn btn-primary" onclick="closeOrderTracking(); scrollToSection('packages')">
+                        🛍️ Mulai Belanja
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <a href="#" class="navbar-logo">Lunavia</a>
+        <div class="navbar-menu" id="navMenu">
+            <a href="#home">Beranda</a>
+            <a href="#about">Tentang</a>
+            <a href="themes.html">Tema</a>
+            <a href="#packages">Paket</a>
+            <a href="#contact">Kontak</a>
+            <button class="cart-button" onclick="openOrderTracking()" style="background: linear-gradient(135deg, var(--gold), #f59e0b);">
+                <i class='bx bx-package'></i> Pesanan
+            </button>
+            <button class="cart-button" onclick="openCart()">
+                <i class='bx bx-cart' style='color:#ffffff'></i> <span class="cart-count" id="cartCount">0</span>
+            </button>
+        </div>
+        <button class="cart-button" onclick="openCart()" style="display: none;" id="mobileCartBtn">
+            <i class='bx bx-cart' style='color:#ffffff'></i><span class="cart-count" id="mobileCartCount">0</span>
+        </button>
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- Mobile Bottom Navigation -->
+    <div class="mobile-navbar">
+        <div class="mobile-nav-grid">
+            <a href="#home" class="mobile-nav-item active">
+                <i class='bx bx-home'></i>
+                <span>Beranda</span>
+            </a>
+               <a href="#about" class="mobile-nav-item">
+                <i class='bx bx-info-circle'></i>
+                <span>Tentang</span>
+            </a>
+            <a href="#themes" class="mobile-nav-item">
+                <i class='bx bx-palette'></i>
+                <span>Tema</span>
+            </a>
+            <a href="#packages" class="mobile-nav-item">
+                <i class='bx bx-package'></i>
+                <span>Paket</span>
+            </a>
+            <a href="javascript:void(0)" onclick="openOrderTracking()" class="mobile-nav-item">
+                <i class='bx bx-history'></i>
+                <span>History</span>
+            </a>
+            <a href="#contact" class="mobile-nav-item">
+                <i class='bx bx-message-dots'></i>
+                <span>Kontak</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3><i class='bx bx-cart' style='color:#ffffff'></i> Keranjang</h3>
+            <button class="cart-close" onclick="closeCart()">✕</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <div class="empty-cart">
+                <div class="empty-cart-icon">🛍️</div>
+                <p>Keranjang Anda kosong</p>
+                <div class="cart-empty-actions">
+                    <button class="btn btn-primary" onclick="closeCart(); scrollToSection('themes')">
+                        🎨 Pilih Tema
+                    </button>
+                    <button class="btn btn-secondary" onclick="closeCart(); scrollToSection('packages')">
+                        📦 Lihat Paket
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div id="cartSummary"></div>
+            <div class="cart-actions">
+                <button style="margin-top:1rem;" class="btn btn-danger" onclick="clearCart()">🗑️ Kosongkan</button>
+                <button class="btn btn-primary" onclick="proceedToCheckout()">💳 Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="checkout-modal" id="checkoutModal">
+        <div class="checkout-content">
+            <div class="checkout-header">
+                <h2>🎉 Checkout</h2>
+                <p style="color: var(--text-muted)">Selesaikan pesanan Anda</p>
+            </div>
+
+            <div class="checkout-steps">
+                <div class="checkout-step active" id="step1">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Detail</div>
+                </div>
+                <div class="checkout-step" id="step2">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Bayar</div>
+                </div>
+                <div class="checkout-step" id="step3">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Selesai</div>
+                </div>
+            </div>
+
+            <!-- Step 1: Customer Details -->
+            <div class="checkout-section active" id="section1">
+                <div class="form-group">
+                    <label class="form-label">Nama Lengkap *</label>
+                    <input type="text" class="form-control" id="customerName" placeholder="John Doe" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email *</label>
+                    <input type="email" class="form-control" id="customerEmail" placeholder="john@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nomor WhatsApp *</label>
+                    <input type="tel" class="form-control" id="customerPhone" placeholder="+62 xxx xxx xxxx" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Catatan (Opsional)</label>
+                    <textarea class="form-control" id="customerNotes" placeholder="Catatan khusus untuk pesanan Anda..."></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="validateAndNext()">Lanjutkan ke Pembayaran →</button>
+            </div>
+
+            <!-- Step 2: Payment Method -->
+            <div class="checkout-section" id="section2">
+                <div class="payment-timer">
+                    <div class="timer-label">⏰ Selesaikan pembayaran dalam:</div>
+                    <div class="timer-display" id="paymentTimer">15:00</div>
+                </div>
+
+                <h3 style="margin-bottom: 1.5rem;">Pilih Metode Pembayaran</h3>
+                
+                <div class="installment-section">
+                    <h4 style="margin-bottom: 0.5rem;">💰 Opsi Cicilan</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Pilih tenor cicilan (khusus transfer bank)</p>
+                    <div class="installment-options">
+                        <div class="installment-option selected" onclick="selectInstallment(1, this)">
+                            <div class="installment-text">
+                                <strong>Bayar Penuh</strong>
+                                <div>Tanpa bunga</div>
+                            </div>
+                        </div>
+                        <div class="installment-option" onclick="selectInstallment(3, this)">
+                            <div class="installment-text">
+                                <strong>3x Cicilan</strong>
+                                <div>Bunga 3% per bulan</div>
+                            </div>
+                        </div>
+                        <div class="installment-option" onclick="selectInstallment(6, this)">
+                            <div class="installment-text">
+                                <strong>6x Cicilan</strong>
+                                <div>Bunga 2.5% per bulan</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="payment-methods">
+                    <!-- GOPAY/QRIS -->
+                    <div class="payment-method" onclick="selectPayment('gopay')">
+                        <div class="payment-method-header">
+                            <div class="payment-icon">💳</div>
+                            <div class="payment-info">
+                                <h4>GoPay / QRIS</h4>
+                                <p>Scan QRIS untuk pembayaran instant</p>
+                            </div>
+                        </div>
+                        <div class="payment-details">
+                            <div class="qr-code-section">
+                                <h4>Scan QR dengan e-wallet</h4>
+                                <div class="qr-placeholder">
+                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=00020101021226670016COM.NOBUBANK.WWW01189360050300000870214882020411497520454995802ID5909LUNAVIA6010BANJARMASIN61055222062070703A0163041D3D" alt="QRIS">
+                                </div>
+                                <p>Pembayaran otomatis terverifikasi</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TRANSFER BANK -->
+                    <div class="payment-method" onclick="selectPayment('bank')">
+                        <div class="payment-method-header">
+                            <div class="payment-icon">🏦</div>
+                            <div class="payment-info">
+                                <h4>Transfer Bank</h4>
+                                <p>BCA, Mandiri, BNI</p>
+                            </div>
+                        </div>
+                        <div class="payment-details">
+                            <div class="payment-account">
+                                <div class="account-info">
+                                    <div class="account-label">BCA - a.n. LUNAVIA</div>
+                                    <div class="account-number">8820 2041 1497</div>
+                                </div>
+                                <button class="copy-btn" onclick="copyToClipboard('8820204114970', event)">
+                                    📋 Salin
+                                </button>
+                            </div>
+                            <div class="payment-account">
+                                <div class="account-info">
+                                    <div class="account-label">Mandiri - a.n. LUNAVIA</div>
+                                    <div class="account-number">1370 0159 8734</div>
+                                </div>
+                                <button class="copy-btn" onclick="copyToClipboard('1370015987340', event)">
+                                    📋 Salin
+                                </button>
+                            </div>
+                            <div class="payment-account">
+                                <div class="account-info">
+                                    <div class="account-label">BNI - a.n. LUNAVIA</div>
+                                    <div class="account-number">0882 0204 114</div>
+                                </div>
+                                <button class="copy-btn" onclick="copyToClipboard('08820204114', event)">
+                                    📋 Salin
+                                </button>
+                            </div>
+                            <div class="payment-note">
+                                Transfer sesuai total tagihan untuk verifikasi otomatis
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DANA -->
+                    <div class="payment-method" onclick="selectPayment('dana')">
+                        <div class="payment-method-header">
+                            <div class="payment-icon">💙</div>
+                            <div class="payment-info">
+                                <h4>DANA</h4>
+                                <p>Transfer via aplikasi DANA</p>
+                            </div>
+                        </div>
+                        <div class="payment-details">
+                            <div class="payment-account">
+                                <div class="account-info">
+                                    <div class="account-label">DANA - a.n. LUNAVIA</div>
+                                    <div class="account-number">0882-0204-11497</div>
+                                </div>
+                                <button class="copy-btn" onclick="copyToClipboard('088202041149', event)">
+                                    📋 Salin
+                                </button>
+                            </div>
+                            <div class="qr-code-section">
+                                <h4>Scan QR Code DANA</h4>
+                                <div class="qr-placeholder">
+                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=dana://088202041149" alt="DANA QR">
+                                </div>
+                                <p>Scan dengan aplikasi DANA</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- OVO -->
+                    <div class="payment-method" onclick="selectPayment('ovo')">
+                        <div class="payment-method-header">
+                            <div class="payment-icon">🟣</div>
+                            <div class="payment-info">
+                                <h4>OVO</h4>
+                                <p>Transfer via aplikasi OVO</p>
+                            </div>
+                        </div>
+                        <div class="payment-details">
+                            <div class="payment-account">
+                                <div class="account-info">
+                                    <div class="account-label">OVO - a.n. LUNAVIA</div>
+                                    <div class="account-number">0882-0204-11497</div>
+                                </div>
+                                <button class="copy-btn" onclick="copyToClipboard('088202041149', event)">
+                                    📋 Salin
+                                </button>
+                            </div>
+                            <div class="payment-note">
+                                Pastikan mengirim ke nomor yang benar
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SHOPEEPAY -->
+                    <div class="payment-method" onclick="selectPayment('shopeepay')">
+                        <div class="payment-method-header">
+                            <div class="payment-icon">🧡</div>
+                            <div class="payment-info">
+                                <h4>ShopeePay</h4>
+                                <p>Bayar via ShopeePay</p>
+                            </div>
+                        </div>
+                        <div class="payment-details">
+                            <div class="payment-account">
+                                <div class="account-info">
+                                    <div class="account-label">ShopeePay - a.n. LUNAVIA</div>
+                                    <div class="account-number">0882-0204-11497</div>
+                                </div>
+                                <button class="copy-btn" onclick="copyToClipboard('088202041149', event)">
+                                    📋 Salin
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upload Payment Proof -->
+                <div class="upload-section">
+                    <h4 style="margin-bottom: 1rem;">📸 Upload Bukti Pembayaran</h4>
+                    <div class="upload-area" id="uploadArea" onclick="document.getElementById('paymentProof').click()">
+                        <div class="upload-icon">📤</div>
+                        <p style="font-weight: 600; margin-bottom: 0.5rem;">Klik atau drag & drop</p>
+                        <p style="color: var(--text-muted); font-size: 0.85rem;">PNG, JPG, PDF (Max 5MB)</p>
+                    </div>
+                    <input type="file" id="paymentProof" accept="image/*,.pdf" style="display: none;">
+                    <div class="upload-preview" id="uploadPreview">
+                        <p style="color: var(--success); font-weight: 600; margin-bottom: 0.5rem;">✅ File berhasil diunggah!</p>
+                        <p id="fileName" style="color: var(--text-muted); font-size: 0.85rem;"></p>
+                        <img id="previewImage" class="preview-image" style="display: none;">
+                    </div>
+                </div>
+
+                <div class="promo-section">
+                    <h4 style="margin-bottom: 1rem;">🎁 Punya Kode Promo?</h4>
+                    <div class="promo-input-wrapper">
+                        <input type="text" class="promo-input" id="promoCode" placeholder="Masukkan kode promo">
+                        <button class="apply-promo-btn" id="applyPromoBtn" onclick="applyPromo()">Terapkan</button>
+                        <button class="apply-promo-btn" id="removePromoBtn" onclick="removePromo()" style="display: none; background: var(--danger);">Hapus</button>
+                    </div>
+                    <div class="discount-applied" id="discountMessage">
+                        ✅ Diskon berhasil diterapkan!
+                    </div>
+                </div>
+
+                <div class="order-summary">
+                    <h4>Ringkasan Pesanan</h4>
+                    <div id="orderSummaryItems"></div>
+                </div>
+
+                <div class="checkout-button-grid">
+                    <button class="btn btn-secondary" onclick="nextStep(1)">← Kembali</button>
+                    <button class="btn btn-primary" id="confirmPaymentBtn" onclick="processPayment()">Konfirmasi</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Success -->
+            <div class="checkout-section" id="section3">
+                <div class="success-animation">
+                    <div class="success-icon">✅</div>
+                    <h2>Pesanan Berhasil!</h2>
+                    <p style="color: var(--text-muted); margin: 1.5rem 0;">
+                        Terima kasih telah memesan! Kami akan menghubungi Anda segera untuk konfirmasi.
+                    </p>
+                    <div style="background: rgba(139, 92, 246, 0.1); padding: 1.5rem; border-radius: 15px; margin-bottom: 2rem;">
+                        <p style="color: var(--accent-light); margin-bottom: 1rem;">
+                            📧 Cek email Anda untuk detail pesanan
+                        </p>
+                        <p style="color: var(--gold); font-weight: 600;">
+                            Order ID: #<span id="orderId"></span>
+                        </p>
+                    </div>
+                    <button class="btn btn-primary" onclick="closeCheckout()">Selesai</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>✨</span>
+                <span>Undangan Digital Premium</span>
+            </div>
+            <h1 class="hero-title">
+                Ciptakan Momen<br>Pernikahan Tak Terlupakan
+            </h1>
+            <p class="hero-subtitle">
+                Ubah hari istimewa Anda dengan undangan digital pernikahan yang elegan. 
+                Desain modern, pengalaman sempurna, dan kenangan yang abadi selamanya.
+            </p>
+            <div class="hero-cta">
+                <a href="#themes" class="btn btn-primary">Jelajahi Tema</a>
+                <a href="#contact" class="btn btn-secondary">Mulai Sekarang</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number" data-target="5000">0</div>
+                <div class="stat-label">Pasangan Bahagia</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="50">0</div>
+                <div class="stat-label">Tema Premium</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="100">0</div>
+                <div class="stat-label">Negara Dilayani</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">4.9★</div>
+                <div class="stat-label">Rating Pelanggan</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="section-header">
+            <span class="section-badge">Mengapa Memilih Kami</span>
+            <h2 class="section-title">Tingkatkan Pengalaman Pernikahan Anda</h2>
+            <p class="section-description">
+                Kami menggabungkan teknologi terkini dengan keanggunan abadi untuk menciptakan 
+                undangan digital yang sempurna menangkap kisah cinta Anda.
+            </p>
+        </div>
+        <div class="about-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h3 class="feature-title">Desain Kustom</h3>
+                <p class="feature-text">
+                    Tema personal disesuaikan dengan gaya unik dan visi pernikahan Anda.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3 class="feature-title">Sangat Cepat</h3>
+                <p class="feature-text">
+                    Undangan Anda siap dalam hitungan jam, bukan hari.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💎</div>
+                <h3 class="feature-title">Kualitas Premium</h3>
+                <p class="feature-text">
+                    Desain tingkat profesional yang elegan, modern, dan berkesan.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌍</div>
+                <h3 class="feature-title">Ramah Lingkungan</h3>
+                <p class="feature-text">
+                    Go green tanpa mengorbankan gaya dengan undangan digital.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3 class="feature-title">Mobile Friendly</h3>
+                <p class="feature-text">
+                    Tampilan sempurna di semua perangkat untuk RSVP instant.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔄</div>
+                <h3 class="feature-title">Revisi Unlimited</h3>
+                <p class="feature-text">
+                    Lakukan perubahan kapan saja hingga sempurna.
+                </p>
+            </div>
+        </div>
+    </section>
+        <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-header">
+            <span class="section-badge">Fitur Lengkap</span>
+            <h2 class="section-title">Semua yang Anda Butuhkan dalam Satu Platform</h2>
+            <p class="section-description">
+                Fitur-fitur canggih yang membuat undangan digital Anda lebih interaktif dan berkesan
+            </p>
+        </div>
+        <div class="features-container">
+            <div class="feature-box">
+                <div class="feature-box-icon">📸</div>
+                <h3 class="feature-box-title">Galeri Foto & Video</h3>
+                <p class="feature-box-text">Upload foto pre-wedding dan video cerita cinta Anda. Mendukung hingga 50 foto dan video dengan loading cepat.</p>
+            </div>
+            <div class="feature-box">
+                <div class="feature-box-icon">💌</div>
+                <h3 class="feature-box-title">RSVP Digital</h3>
+                <p class="feature-box-text">Tamu dapat konfirmasi kehadiran langsung. Dapatkan laporan real-time jumlah tamu yang hadir untuk persiapan lebih baik.</p>
+            </div>
+            <div class="feature-box">
+                <div class="feature-box-icon">💰</div>
+                <h3 class="feature-box-title">Amplop Digital</h3>
+                <p class="feature-box-text">Terima ucapan dan hadiah digital dengan mudah. Terintegrasi dengan berbagai e-wallet dan transfer bank.</p>
+            </div>
+            <div class="feature-box">
+                <div class="feature-box-icon">🎵</div>
+                <h3 class="feature-box-title">Musik Latar</h3>
+                <p class="feature-box-text">Tambahkan lagu favorit Anda. Mendukung autoplay dengan kontrol volume untuk pengalaman yang lebih personal.</p>
+            </div>
+            <div class="feature-box">
+                <div class="feature-box-icon">⏰</div>
+                <h3 class="feature-box-title">Countdown Timer</h3>
+                <p class="feature-box-text">Hitung mundur otomatis menuju hari bahagia Anda. Tampilan real-time dalam hari, jam, menit, dan detik.</p>
+            </div>
+            <div class="feature-box">
+                <div class="feature-box-icon">📍</div>
+                <h3 class="feature-box-title">Google Maps Terintegrasi</h3>
+                <p class="feature-box-text">Lokasi acara dengan navigasi langsung. Tamu dapat membuka Maps dengan satu klik untuk petunjuk arah.</p>
+            </div>
+            <div class="feature-box">
+                <div class="feature-box-icon">✉️</div>
+                <h3 class="feature-box-title">Pesan & Ucapan</h3>
+                <p class="feature-box-text">Buku tamu digital interaktif. Tamu dapat meninggalkan ucapan selamat yang tersimpan selamanya.</p>
+            </div>
+            <div class="feature-box">
+                <div class="feature-box-icon">📊</div>
+                <h3 class="feature-box-title">Dashboard Analytics</h3>
+                <p class="feature-box-text">Lihat statistik pengunjung dan RSVP. Dapatkan insight lengkap tentang engagement undangan Anda.</p>
+            </div>
+            <div class="feature-box">
+                <div class="feature-box-icon">🔐</div>
+                <h3 class="feature-box-title">Password Protection</h3>
+                <p class="feature-box-text">Lindungi privasi undangan Anda. Hanya tamu yang memiliki password yang dapat mengakses.</p>
+            </div>
+            <div class="feature-box">
+                <div class="feature-box-icon">📱</div>
+                <h3 class="feature-box-title">QR Code Check-in</h3>
+                <p class="feature-box-text">QR code unik untuk setiap tamu. Memudahkan proses check-in di hari pernikahan Anda.</p>
+            </div>
+            <div class="feature-box">
+                <div class="feature-box-icon">🌐</div>
+                <h3 class="feature-box-title">Multi-Bahasa</h3>
+                <p class="feature-box-text">Mendukung Bahasa Indonesia dan Inggris. Cocok untuk acara internasional atau tamu dari berbagai negara.</p>
+            </div>
+            <div class="feature-box">
+                <div class="feature-box-icon">⚡</div>
+                <h3 class="feature-box-title">Loading Super Cepat</h3>
+                <p class="feature-box-text">Optimasi performa maksimal. Undangan terbuka dalam hitungan detik di semua perangkat dan koneksi.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Order Section -->
+    <section class="how-to-order" id="how-to-order">
+        <div class="section-header">
+            <span class="section-badge">Cara Pemesanan</span>
+            <h2 class="section-title">Mudah dan Cepat, Hanya 4 Langkah!</h2>
+            <p class="section-description">
+                Dapatkan undangan digital premium Anda dalam waktu singkat dengan proses yang simple
+            </p>
+        </div>
+        <div class="steps-container">
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3 class="step-title">Pilih Tema & Paket</h3>
+                    <p class="step-description">Jelajahi koleksi tema kami dan pilih yang sesuai dengan gaya pernikahan Anda. Pilih paket yang cocok dengan kebutuhan dan budget.</p>
+                    <div class="step-action">
+                        <button class="btn btn-primary" onclick="scrollToSection('themes')">
+                            🎨 Lihat Tema
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3 class="step-title">Isi Data & Checkout</h3>
+                    <p class="step-description">Lengkapi data diri dan detail acara pernikahan Anda. Lanjutkan ke proses checkout dan pilih metode pembayaran yang diinginkan.</p>
+                    <div class="step-highlight">
+                        💳 Tersedia berbagai metode pembayaran: Transfer Bank, E-wallet (GoPay, OVO, DANA, ShopeePay), dan QRIS
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step-item">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3 class="step-title">Kirim Data via WhatsApp</h3>
+                    <p class="step-description">Setelah pembayaran, kirim detail acara lengkap melalui WhatsApp: nama pasangan, tanggal & waktu acara, lokasi, foto, dan informasi lainnya.</p>
+                    <div class="step-highlight">
+                        📱 Admin kami siap membantu 24/7 untuk memastikan semua detail sempurna
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step-item">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3 class="step-title">Terima & Bagikan</h3>
+                    <p class="step-description">Undangan digital Anda akan selesai dalam 1-3 jam kerja. Dapatkan link undangan dan bagikan ke tamu melalui WhatsApp, media sosial, atau email.</p>
+                    <div class="step-action">
+                        <button class="btn btn-secondary" onclick="openWhatsApp()">
+                            <i class='bx bxl-whatsapp'></i> Hubungi Sekarang
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="order-cta">
+            <div class="order-cta-content">
+                <h3>Siap Membuat Undangan Impian Anda?</h3>
+                <p>Proses cepat, hasil maksimal. Dapatkan undangan digital premium dengan harga terjangkau!</p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; margin-top: 1.5rem;">
+                    <button class="btn btn-primary" onclick="scrollToSection('packages')" style="width: auto;">
+                        🚀 Mulai Pesan Sekarang
+                    </button>
+                    <button class="btn btn-secondary" onclick="openWhatsApp()" style="width: auto;">
+                        💬 Tanya Admin Dulu
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Themes Section -->
+    <section class="themes" id="themes">
+        <div class="section-header">
+            <span class="section-badge">Koleksi Kami</span>
+            <h2 class="section-title">Tema Pernikahan Menakjubkan</h2>
+            <p class="section-description">
+                Jelajahi koleksi desain elegan kami, masing-masing dibuat untuk menceritakan kisah unik Anda.
+            </p>
+        </div>
+
+        <div class="search-bar">
+            <div class="search-wrapper">
+                <input type="text" class="search-input" id="searchInput" placeholder="Cari tema (contoh: minimalis, elegan, modern)">
+                <div class="search-buttons">
+                     <button style="margin-right:0.5rem" class="icon-btn clear" id="clearBtn">✕</button>
+                    <button class="icon-btn" id="searchBtn"><i class='bx bx-search'></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="theme-grid" id="themeGrid"></div>
+    </section>
+
+    <!-- Packages Section -->
+    <section class="packages" id="packages">
+        <div class="section-header">
+            <span class="section-badge">Paket Harga</span>
+            <h2 class="section-title">Pilih Paket Sempurna Anda</h2>
+            <p class="section-description">
+                Opsi harga fleksibel yang dirancang untuk setiap budget dan kebutuhan.
+            </p>
+        </div>
+
+        <div class="package-grid">
+            <div class="package-card">
+                <h3 class="package-name">Starter</h3>
+                <div class="package-price">Rp 50K</div>
+                <ul class="package-features">
+                    <li>Revisi Tanpa Batas</li>
+                    <li>Daftar Tamu Unlimited</li>
+                    <li>Musik Latar Kustom</li>
+                    <li>Hitung Mundur Waktu</li>
+                    <li>Integrasi Google Maps</li>
+                    <li>Analitik Dasar</li>
+                </ul>
+                <button class="btn btn-primary" style="width: 100%;" onclick="addPackageToCart('Starter', 50000)">Pilih Starter</button>
+            </div>
+
+            <div class="package-card featured">
+                <span><div class="package-badge">PALING POPULER</div></span>
+                <h3 class="package-name">Premium</h3>
+                <div class="package-price-old">Rp 150K</div>
+                <div class="package-price">Rp 100K</div>
+                <ul class="package-features">
+                    <li>Semua Fitur Starter</li>
+                    <li>RSVP & Pesan Tamu</li>
+                    <li>QR Code Check-in</li>
+                    <li>Amplop Digital</li>
+                    <li>Galeri Foto & Video</li>
+                    <li>Dukungan Prioritas</li>
+                    <li>Analitik Lanjutan</li>
+                </ul>
+            </div>
+
+            <div class="package-card">
+                <h3 class="package-name">Ultimate</h3>
+                <div class="package-price">Rp 200K</div>
+                <ul class="package-features">
+                    <li>Semua Fitur Premium</li>
+                    <li>Nama Domain Kustom</li>
+                    <li>Video Background</li>
+                    <li>Integrasi Live Streaming</li>
+                    <li>Buku Tamu Digital</li>
+                    <li>Website Pernikahan</li>
+                    <li>Dukungan VIP 24/7</li>
+                    <li>Update Selamanya</li>
+                </ul>
+                <button class="btn btn-primary" style="width: 100%;" onclick="addPackageToCart('Ultimate', 200000)">Pilih Ultimate</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="section-header">
+            <span class="section-badge">Hubungi Kami</span>
+            <h2 class="section-title">Mari Ciptakan Sesuatu Yang Indah</h2>
+            <p class="section-description">
+                Ada pertanyaan? Kami di sini untuk membantu mewujudkan visi pernikahan Anda.
+            </p>
+        </div>
+
+        <div class="contact-grid">
+            <div class="contact-info">
+                <h3>Siap untuk memulai?</h3>
+                <p>
+                    Hubungi kami hari ini dan mari diskusikan bagaimana kami dapat membuat undangan 
+                    pernikahan Anda benar-benar tak terlupakan.
+                </p>
+                <div class="contact-details">
+                    <div class="contact-item">
+                        <div class="contact-icon">📧</div>
+                        <div>
+                            <strong>Email</strong>
+                            <p style="color: var(--text-muted); margin: 0;">hello@lunavia.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">📱</div>
+                        <div>
+                            <strong>WhatsApp</strong>
+                            <p style="color: var(--text-muted); margin: 0;">+62 882-020-411-497</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">📍</div>
+                        <div>
+                            <strong>Lokasi</strong>
+                            <p style="color: var(--text-muted); margin: 0;">Banjarmasin, Indonesia</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-form">
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label class="form-label">Nama Lengkap</label>
+                        <input type="text" class="form-control" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Alamat Email</label>
+                        <input type="email" class="form-control" placeholder="john@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Nomor WhatsApp</label>
+                        <input type="tel" class="form-control" placeholder="+62 xxx xxx xxxx" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Pesan Anda</label>
+                        <textarea class="form-control" placeholder="Ceritakan tentang pernikahan Anda..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Kirim Pesan</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>Lunavia</h3>
+                <p>Menciptakan undangan digital pernikahan yang indah untuk menangkap keajaiban hari istimewa Anda.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class='bx bxl-whatsapp'></i></a>
+                    <a href="#" class="social-link"><i class='bx bxl-instagram'></i></a>
+                    <a href="#" class="social-link"><i class='bx bxl-facebook'></i></a>
+                    <a href="#" class="social-link"><i class='bx bxl-gmail'></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>Tautan Cepat</h4>
+                <ul>
+                    <li><a href="#home">Beranda</a></li>
+                    <li><a href="#about">Tentang Kami</a></li>
+                    <li><a href="#themes">Tema</a></li>
+                    <li><a href="#packages">Harga</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Layanan</h4>
+                <ul>
+                    <li><a href="#">Undangan Pernikahan</a></li>
+                    <li><a href="#">Desain Kustom</a></li>
+                    <li><a href="#">Manajemen RSVP</a></li>
+                    <li><a href="#">Analitik Tamu</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Dukungan</h4>
+                <ul>
+                    <li><a href="#contact">Hubungi Kami</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Kebijakan Privasi</a></li>
+                    <li><a href="#">Syarat Layanan</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Lunavia Digital - Auralis Group. Hak cipta dilindungi. Dibuat dengan ❤️</p>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top -->
+    <div class="scroll-top" id="scrollTop">↑</div>
+
+    <script src="JS/script.js"></script>
+</body>
+
+</html>
